@@ -5,11 +5,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public int stageNum;        // 현재 스테이지
+    public int currentStageNum; // 현재 스테이지
     public int stageCatCount;   // 현재 스테이지에서 찾은 고양이 수
     public int totalCatCount;   // 전체 스테이지에서 찾은 고양이 수
-    public int[] catNumToFind  // 각 스테이지에서 찾아야 할 고양이 수
+    public int[] catNumToFind   // 각 스테이지에서 찾아야 할 고양이 수
         = { 1, 2, 5, 5, 10, 10 };
+
+    public bool isUIClosed;     // UI 패널이 모두 닫힌 플레이 화면인지 체크
 
     private void Awake()
     {
@@ -24,10 +26,7 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
         #endregion
-    }
 
-    private void Start()
-    {
         Init();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -35,15 +34,16 @@ public class GameManager : MonoBehaviour
     // 변수 초기화
     private void Init()
     {
-        stageNum = SceneManager.GetActiveScene().buildIndex + 1;
-        stageNum = 0;
+        currentStageNum = SceneManager.GetActiveScene().buildIndex + 1;
+        currentStageNum = 0;
         totalCatCount = 0;
+        isUIClosed = true;
     }
 
     // 씬 전환 시 stageNum과 stageCatCount 값 초기화
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        stageNum = SceneManager.GetActiveScene().buildIndex + 1;
+        currentStageNum = SceneManager.GetActiveScene().buildIndex + 1;
         stageCatCount = 0;
     }
 
@@ -54,5 +54,18 @@ public class GameManager : MonoBehaviour
         totalCatCount++;
 
         // UI text를 업데이트하는 코드 추가
+    }
+
+    public bool GameOver()
+    {
+        // 고양이를 다 찾지 못했다면
+        if (stageCatCount < catNumToFind[currentStageNum])
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

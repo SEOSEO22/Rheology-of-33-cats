@@ -2,9 +2,21 @@ using UnityEngine;
 
 public class ClickCats : MonoBehaviour
 {
+    [SerializeField] 
+    private Sprite foundSprite;
+    private bool isClicked;
+
+    private void Start()
+    {
+        isClicked = false;
+    }
+
     private void Update()
     {
-        HandleInput();
+        if (isClicked == false && GameManager.Instance.isUIClosed == true)
+        {
+            HandleInput();
+        }
     }
 
     // 터치/키보드 입력 시 이미지를 빨간색으로 변경
@@ -17,10 +29,12 @@ public class ClickCats : MonoBehaviour
 
             if (hit.collider != null && hit.collider.gameObject == gameObject)
             {
-                GetComponent<SpriteRenderer>().color = Color.red;
-            }
+                isClicked = true;
+                GetComponent<SpriteRenderer>().sprite = foundSprite;
 
-            GameManager.Instance.UpdateFoundCatInfo();
+                SoundManager.Instance.PlaySFXSound();
+                GameManager.Instance.UpdateFoundCatInfo();
+            }
         }
     }
 }

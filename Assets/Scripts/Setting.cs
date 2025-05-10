@@ -1,0 +1,50 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class Setting : MonoBehaviour
+{
+    public Slider bgmSlider;
+    public Slider sfxSlider;
+
+    private void Start()
+    {
+        bgmSlider.value = SoundManager.Instance.bgmPlayer.volume;
+        sfxSlider.value = SoundManager.Instance.sfxPlayer.volume;
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.isUIClosed = false;
+    }
+
+    private void Update()
+    {
+        SoundManager.Instance.SetBGMVolume(bgmSlider.value);
+        SoundManager.Instance.SetSFXVolume(sfxSlider.value);
+    }
+
+    public void OnRestartButtonClicked()
+    {
+        Destroy(GameManager.Instance);
+        Destroy(SoundManager.Instance);
+        SceneManager.LoadScene("Stage 1");
+    }
+
+    public void OnSettingBtnClicked()
+    {
+        gameObject.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void OnCloseButtonClicked()
+    {
+        Time.timeScale = 1;
+        gameObject.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.isUIClosed = true;
+    }
+}
