@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,6 +20,11 @@ public class Setting : MonoBehaviour
     }
 
     private void Update()
+    {
+        ChangeVolume();
+    }
+
+    private void ChangeVolume()
     {
         SoundManager.Instance.SetBGMVolume(bgmSlider.value);
         SoundManager.Instance.SetSFXVolume(sfxSlider.value);

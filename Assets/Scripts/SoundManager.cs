@@ -56,10 +56,13 @@ public class SoundManager : MonoBehaviour
 
     public void SetSFXVolume(float volume)
     {
-        if (volume != sfxPlayer.volume)
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
         {
-            sfxPlayer.volume = volume;
-            PlaySFXSound();
+            if (volume != sfxPlayer.volume)
+            {
+                sfxPlayer.volume = volume;
+                PlaySFXSound();
+            }
         }
     }
 }
