@@ -37,6 +37,11 @@ public class Setting : MonoBehaviour
         SceneManager.LoadScene("Stage 1");
     }
 
+    public void OnFullScreenBtnClicked()
+    {
+        GameManager.Instance.SetResolution();
+    }
+
     public void OnSettingBtnClicked()
     {
         gameObject.SetActive(true);
