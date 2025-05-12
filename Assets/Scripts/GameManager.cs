@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     // 변수 초기화
     private void Init()
     {
-        currentStageNum = SceneManager.GetActiveScene().buildIndex;
+        currentStageNum = SceneManager.GetActiveScene().buildIndex - 1;
         stageCatCount = 0;
         totalCatCount = 0;
         isUIClosed = true;
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         isUIClosed = true;
-        currentStageNum = SceneManager.GetActiveScene().buildIndex;
+        currentStageNum = SceneManager.GetActiveScene().buildIndex - 1;
         stageCatCount = 0;
     }
 
