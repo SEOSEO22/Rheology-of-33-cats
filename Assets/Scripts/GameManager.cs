@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -10,9 +11,11 @@ public class GameManager : MonoBehaviour
     public int totalCatCount;   // 전체 스테이지에서 찾은 고양이 수
     public int[] catNumToFind   // 각 스테이지에서 찾아야 할 고양이 수
         = { 1, 2, 5, 5, 10, 10 };
-    public float totalTime = 0;   // 게임을 플레이한 시간
+    public float totalTime;     // 게임을 플레이한 시간
 
     public bool isUIClosed;     // UI 패널이 모두 닫힌 플레이 화면인지 체크
+
+    private float targetAspect = 16f / 9f;
 
     private void Awake()
     {
@@ -28,6 +31,7 @@ public class GameManager : MonoBehaviour
         #endregion
 
         Init();
+        SetResolution();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -37,6 +41,7 @@ public class GameManager : MonoBehaviour
         currentStageNum = SceneManager.GetActiveScene().buildIndex - 1;
         stageCatCount = 0;
         totalCatCount = 0;
+        totalTime = 0;
         isUIClosed = true;
     }
 
@@ -46,6 +51,8 @@ public class GameManager : MonoBehaviour
         isUIClosed = true;
         currentStageNum = SceneManager.GetActiveScene().buildIndex - 1;
         stageCatCount = 0;
+
+        SetResolution();
     }
 
     // 고양이를 찾을 시 찾은 고양이 수를 표기하는 text UI 업데이트
@@ -58,24 +65,36 @@ public class GameManager : MonoBehaviour
     // 해상도 설정하는 함수
     public void SetResolution()
     {
-        int setWidth = 1920; // 사용자 설정 너비
-        int setHeight = 1080; // 사용자 설정 높이
+        float windowAspect = (float)Screen.width / (float)Screen.height;
+        float scaleHeight = windowAspect / targetAspect;
 
-        int deviceWidth = Screen.width; // 기기 너비 저장
-        int deviceHeight = Screen.height; // 기기 높이 저장
+        Camera camera = Camera.main;
 
-        Screen.SetResolution(setWidth, (int)(((float)deviceHeight / deviceWidth) * setWidth), true); // SetResolution 함수 제대로 사용하기
-        Camera.main.backgroundColor = Color.black; // 카메라 배경색을 검정색으로 설정
-
-        if ((float)setWidth / setHeight < (float)deviceWidth / deviceHeight) // 기기의 해상도 비가 더 큰 경우
+        if (scaleHeight < 1.0f)
         {
-            float newWidth = ((float)setWidth / setHeight) / ((float)deviceWidth / deviceHeight); // 새로운 너비
-            Camera.main.rect = new Rect((1f - newWidth) / 2f, 0f, newWidth, 1f); // 새로운 Rect 적용
+            // letterbox: 상하에 검은 띠
+            Rect rect = camera.rect;
+
+            rect.width = 1.0f;
+            rect.height = scaleHeight;
+            rect.x = 0;
+            rect.y = (1.0f - scaleHeight) / 2.0f;
+
+            camera.rect = rect;
         }
-        else // 게임의 해상도 비가 더 큰 경우
+        else
         {
-            float newHeight = ((float)deviceWidth / deviceHeight) / ((float)setWidth / setHeight); // 새로운 높이
-            Camera.main.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight); // 새로운 Rect 적용
+            // pillarbox: 좌우에 검은 띠
+            float scaleWidth = 1.0f / scaleHeight;
+
+            Rect rect = camera.rect;
+
+            rect.width = scaleWidth;
+            rect.height = 1.0f;
+            rect.x = (1.0f - scaleWidth) / 2.0f;
+            rect.y = 0;
+
+            camera.rect = rect;
         }
     }
 

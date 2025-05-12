@@ -32,8 +32,9 @@ public class Setting : MonoBehaviour
 
     public void OnRestartButtonClicked()
     {
-        Destroy(GameManager.Instance);
-        Destroy(SoundManager.Instance);
+        Destroy(GameManager.Instance.gameObject);
+        Destroy(SoundManager.Instance.gameObject);
+        Time.timeScale = 1;
         SceneManager.LoadScene("GameStart");
     }
 

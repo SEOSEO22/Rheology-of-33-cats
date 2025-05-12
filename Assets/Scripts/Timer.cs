@@ -129,8 +129,8 @@ public class Timer : MonoBehaviour
 
     public void OnRestartButtonClicked()
     {
-        Destroy(GameManager.Instance);
-        Destroy(SoundManager.Instance);
+        Destroy(GameManager.Instance.gameObject);
+        Destroy(SoundManager.Instance.gameObject);
         SceneManager.LoadScene("GameStart");
     }
 
