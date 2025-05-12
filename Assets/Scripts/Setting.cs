@@ -34,7 +34,7 @@ public class Setting : MonoBehaviour
     {
         Destroy(GameManager.Instance);
         Destroy(SoundManager.Instance);
-        SceneManager.LoadScene("Stage 1");
+        SceneManager.LoadScene("GameStart");
     }
 
     public void OnFullScreenBtnClicked()

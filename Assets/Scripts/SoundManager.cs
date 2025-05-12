@@ -12,15 +12,14 @@ public class SoundManager : MonoBehaviour
     private void Awake()
     {
         #region Singleton
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
         #endregion
 
         bgmPlayer = GameObject.Find("BGMPlayer").GetComponent<AudioSource>();

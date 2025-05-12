@@ -10,21 +10,21 @@ public class GameManager : MonoBehaviour
     public int totalCatCount;   // 전체 스테이지에서 찾은 고양이 수
     public int[] catNumToFind   // 각 스테이지에서 찾아야 할 고양이 수
         = { 1, 2, 5, 5, 10, 10 };
+    public float totalTime = 0;   // 게임을 플레이한 시간
 
     public bool isUIClosed;     // UI 패널이 모두 닫힌 플레이 화면인지 체크
 
     private void Awake()
     {
         #region Singleton
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
         #endregion
 
         Init();
@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviour
     // 변수 초기화
     private void Init()
     {
-        currentStageNum = SceneManager.GetActiveScene().buildIndex + 1;
-        currentStageNum = 0;
+        currentStageNum = SceneManager.GetActiveScene().buildIndex;
+        stageCatCount = 0;
         totalCatCount = 0;
         isUIClosed = true;
     }
@@ -43,7 +43,8 @@ public class GameManager : MonoBehaviour
     // 씬 전환 시 stageNum과 stageCatCount 값 초기화
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        currentStageNum = SceneManager.GetActiveScene().buildIndex + 1;
+        isUIClosed = true;
+        currentStageNum = SceneManager.GetActiveScene().buildIndex;
         stageCatCount = 0;
     }
 
@@ -52,8 +53,6 @@ public class GameManager : MonoBehaviour
     {
         stageCatCount++;
         totalCatCount++;
-
-        // UI text를 업데이트하는 코드 추가
     }
 
     // 해상도 설정하는 함수
@@ -77,27 +76,6 @@ public class GameManager : MonoBehaviour
         {
             float newHeight = ((float)deviceWidth / deviceHeight) / ((float)setWidth / setHeight); // 새로운 높이
             Camera.main.rect = new Rect(0f, (1f - newHeight) / 2f, 1f, newHeight); // 새로운 Rect 적용
-        }
-    }
-
-    //Test
-    private void Update()
-    {
-        LoadNextStage();
-    }
-
-    //Test
-    public void LoadNextStage()
-    {
-        // 현재 스테이지에서 찾아야할 고양이를 모두 찾고
-        if (stageCatCount == catNumToFind[currentStageNum - 1])
-        {
-            // 현재 씬이 스테이지 6가 아니라면
-            if (SceneManager.GetActiveScene().name != "Stage 6")
-            {
-                // 다음 스테이지 로드
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            }
         }
     }
 
