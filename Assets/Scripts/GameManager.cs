@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
         = { 1, 2, 5, 5, 10, 10 };
     public float totalTime;     // 게임을 플레이한 시간
 
+    public int latestStageRecord;   // 직전 게임 스테이지 기록
+    public float latestTimeRecord;  // 직전 게임 클리어 기록
+
     public bool isUIClosed;     // UI 패널이 모두 닫힌 플레이 화면인지 체크
 
     private float targetAspect = 16f / 9f;
@@ -48,6 +51,12 @@ public class GameManager : MonoBehaviour
     // 씬 전환 시 stageNum과 stageCatCount 값 초기화
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (SceneManager.GetActiveScene().name == "GameStart")
+        {
+            Init();
+            return;
+        }
+
         isUIClosed = true;
         currentStageNum = SceneManager.GetActiveScene().buildIndex - 1;
         stageCatCount = 0;

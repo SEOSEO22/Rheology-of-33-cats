@@ -83,6 +83,8 @@ public class Timer : MonoBehaviour
     IEnumerator HandleGameOver()
     {
         GameManager.Instance.isUIClosed = false;
+        GameManager.Instance.latestTimeRecord = GameManager.Instance.totalTime;
+        GameManager.Instance.latestStageRecord = GameManager.Instance.currentStageNum;
 
         gameOverText.text = stage.ToString() + "단계 타임 아웃!\n\n" +
             "찾은 고양이 수 : " + GameManager.Instance.totalCatCount.ToString() + "마리";
@@ -113,6 +115,8 @@ public class Timer : MonoBehaviour
     IEnumerator HandleFinalClear()
     {
         GameManager.Instance.isUIClosed = false;
+        GameManager.Instance.latestTimeRecord = GameManager.Instance.totalTime;
+        GameManager.Instance.latestStageRecord = GameManager.Instance.currentStageNum;
 
         int totalMin = (int)GameManager.Instance.totalTime / 60;
         int totalSec = (int)GameManager.Instance.totalTime % 60;
@@ -129,8 +133,6 @@ public class Timer : MonoBehaviour
 
     public void OnRestartButtonClicked()
     {
-        Destroy(GameManager.Instance.gameObject);
-        Destroy(SoundManager.Instance.gameObject);
         SceneManager.LoadScene("GameStart");
     }
 
